@@ -1,0 +1,26 @@
+.btn__content {
+    webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-transition: .3s cubic-bezier(.25,.8,.25,1);
+    transition: .3s cubic-bezier(.25,.8,.25,1);
+    z-index: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn .icon--right {
+    margin-left: 16px;
+}
+
+.no-h-padding { padding-left: 8px; padding-right: 8px; }
