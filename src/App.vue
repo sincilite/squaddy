@@ -14,3 +14,9 @@ export default {
   name: 'app'
 }
 </script>
+<style>
+  .grid > div {
+    margin-bottom: 10px;
+    background-color: #ccc;
+  }
+</style>
