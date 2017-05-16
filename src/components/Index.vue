@@ -1,6 +1,44 @@
 <template>
     <div>
-        <md-layout>
+
+      <v-container fluid="fluid">
+        <v-row>
+          <v-col xs12>
+            <v-card class="primary">
+              <v-card-text>12</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col xs6 v-for="i in 2" :key="i">
+            <v-card class="secondary">
+              <v-card-text>6</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col xs4 v-for="i in 3" :key="i">
+            <v-card class="primary">
+              <v-card-text>4</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col xs3 v-for="i in 4" :key="i">
+            <v-card class="secondary">
+              <v-card-text>3</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col xs2 v-for="i in 6" :key="i">
+            <v-card class="primary">
+              <v-card-text>2</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col xs1 v-for="i in 12" :key="i">
+            <v-card class="secondary">
+              <v-card-text>1</v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+
+
+
+        <!--<md-layout>
             <md-layout md-align="center">
                 <md-card>
                     <md-card-header>
@@ -15,7 +53,7 @@
             <md-layout md-align="center">
                 <p>Currently {{ remaining }} places of {{ total }} available</p>
             </md-layout>
-        </md-layout>
+        </md-layout>-->
     </div>
 </template>
 
