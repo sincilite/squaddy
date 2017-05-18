@@ -1,9 +1,22 @@
 <template>
   <div class="confirm">
-    <v-container fluid="fluid" class="pt-4">
+    <v-container fluid="fluid">
 
-      <form v-on:submit.prevent="submitForm">
-        <v-row class="mb-4 ml-4 mr-4">
+
+     <form v-on:submit.prevent="submitForm">
+        <v-row class="mb-2 ml-2 mr-2">
+          <v-col xs12>
+            <v-alert error v-model="alertState">
+              {{ alertMessage }}
+            </v-alert>
+          </v-col>
+          <v-col xs12>
+            <v-alert success v-model="successState">
+              {{ alertMessage }}
+            </v-alert>
+          </v-col>
+        </v-row>
+        <v-row class="mb-4 ml-2 mr-2">
           <v-col xs12>
             <v-card>
               <v-card-row class="blue darken-1">
@@ -60,10 +73,18 @@
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col xs12 sm12>
+                    <v-col xs12 sm6>
                       <v-text-field
+                        v-model="max"
                         name="input-1"
-                        label="Whats the maximum number of players?"
+                        label="What's the maximum number of players?"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col xs12 sm6>
+                      <v-text-field
+                        v-model="location"
+                        name="input-7-1"
+                        label="Where's the game?"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -73,7 +94,7 @@
           </v-col>
         </v-row>
 
-        <v-row class="mb-4 ml-4 mr-4">
+        <v-row class="mb-4 ml-2 mr-2">
           <v-col xs12>
             <v-card>
               <v-card-row class="blue darken-1">
@@ -142,10 +163,14 @@
   </div>
 </template>
 <script>
+import axios from "axios"
 export default {
   name: "manage",
   data () {
     return {
+      alertState: false,
+      successState: false,
+      alertMessage: "",
       notificationOccurance: "",
       notificationDay: "",
       notificationTime: "",
@@ -164,12 +189,39 @@ export default {
         "Friday",
         "Saturday",
         "Sunday"
-      ]
+      ],
+      max: "",
+      location: ""
     }
   },
   methods: {
     submitForm: function () {
-      this.$http.post('api/messages', userInfo);
+      var self = this
+      this.alertState = false
+      axios.post("/user", {
+        notifications: {
+          occurance: this.notificationOccurance,
+          day: this.notificationDay,
+          time: this.notificationTime
+        },
+        game: {
+          occurance: this.occurance,
+          day: this.day,
+          time: this.time,
+          location: this.location,
+          max: this.max
+        }
+      })
+    .then(function (response) {
+      console.log(response)
+      self.successState = true
+      self.alertMessage = "Your game setting have been updated."
+    })
+    .catch(function (error) {
+      console.log(error)
+      self.alertState = true
+      self.alertMessage = "Your game settings could not be updated, please try again."
+    })
     }
   }
 }
