@@ -6,7 +6,7 @@
         <v-toolbar-logo>Toolbar</v-toolbar-logo>
       </v-toolbar>
 
-        <v-sidebar left fixed drawer v-model="nav">
+        <v-sidebar left fixed drawer v-model="nav3">
           <v-list>
             <v-list-item v-for="(link, index) in nav" :key="index">
               <v-list-tile>
@@ -30,6 +30,7 @@ export default {
   name: "app",
   data () {
     return {
+      nav3: "",
       nav: [
         { title: "Games", destination: "/games" },
         { title: "Players", destination: "/players" }
