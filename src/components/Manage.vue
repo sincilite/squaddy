@@ -2,7 +2,6 @@
   <div class="confirm">
     <v-container fluid="fluid">
 
-
      <form v-on:submit.prevent="submitForm">
         <v-row class="mb-2 ml-2 mr-2">
           <v-col xs12>
@@ -38,7 +37,7 @@
                         hint="How often do you play?"
                       />
                     </v-col>
-                    <v-col xs12 sm4>
+                    <v-col xs12 sm4 v-if="occurance == 'Every'">
                       <v-select
                         v-bind:items="weekdays"
                         v-model="day"
@@ -48,6 +47,21 @@
                         auto
                         hint="How often do you play?"
                       />
+                    </v-col>
+                    <v-col xs12 sm4 v-else-if="occurance == 'On'">
+                      <v-dialog
+                        persistent
+                        lazy
+                      >
+                        <v-text-field
+                          slot="activator"
+                          label="Picker in dialog"
+                          v-model="date"
+                          prepend-icon="event"
+                          readonly
+                        ></v-text-field>
+                        <v-date-picker v-model="date" scrollable data-format="DD-MM-YYYY"></v-date-picker>
+                      </v-dialog>
                     </v-col>
                     <v-col xs12 sm4>
                       <v-dialog xs12
@@ -65,7 +79,7 @@
                           <template scope="{ save, cancel }">
                             <v-card-row actions>
                               <v-btn flat primary @click.native="cancel()">Cancel</v-btn>
-                              <v-btn flat primary @click.native="save()">Save</v-btn>
+                              <v-btn flat primary @click.native="save()">Set</v-btn>
                             </v-card-row>
                           </template>
                         </v-time-picker>
@@ -73,19 +87,31 @@
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col xs12 sm6>
+                    <v-col xs12 sm4>
                       <v-text-field
                         v-model="max"
                         name="input-1"
                         label="What's the maximum number of players?"
                       ></v-text-field>
                     </v-col>
-                    <v-col xs12 sm6>
+                    <v-col xs12 sm4>
                       <v-text-field
                         v-model="location"
                         name="input-7-1"
                         label="Where's the game?"
                       ></v-text-field>
+                    </v-col>
+                    <v-col xs12 sm4>
+                      <v-select
+                        label="Choose team colours"
+                        v-bind:items="colours"
+                        v-model="teams"
+                        multiple
+                        chips
+                        light
+                        hint="Choose two team colours"
+                        persistent-hint
+                      />
                     </v-col>
                   </v-row>
                 </v-container>
@@ -116,7 +142,7 @@
                         hint="Send reminder"
                       />
                     </v-col>
-                    <v-col xs12 sm4>
+                    <v-col xs12 sm4 v-if="notificationOccurance == 'Every'">
                       <v-select
                         v-bind:items="weekdays"
                         v-model="notificationDay"
@@ -127,6 +153,28 @@
                         hint="How often do you play?"
                       />
                     </v-col>
+                    <v-col xs12 sm4 v-else-if="notificationOccurance == 'On'">
+                      <v-dialog
+                        persistent
+                        lazy
+                      >
+                        <v-text-field
+                          slot="activator"
+                          label="Picker in dialog"
+                          v-model="notificationDate"
+                          prepend-icon="event"
+                          readonly
+                        ></v-text-field>
+                        <v-date-picker v-model="notificationDate" scrollable data-format="DD-MM-YYYY" actions>
+                          <template scope="{ save, cancel }">
+                            <v-card-row actions>
+                              <v-btn flat primary @click.native="cancel()">Cancel</v-btn>
+                              <v-btn flat primary @click.native="save()">Saghgfhghe</v-btn>
+                            </v-card-row>
+                          </template>
+                        </v-date-picker>
+                      </v-dialog>
+                    </v-col>
                     <v-col xs12 sm4>
                       <v-dialog xs12
                         persistent
@@ -135,7 +183,7 @@
                         <v-text-field
                           slot="activator"
                           label="At"
-                          v-model="time"
+                          v-model="notificationTime"
                           prepend-icon="access_time"
                           readonly
                         ></v-text-field>
@@ -168,15 +216,19 @@ export default {
   name: "manage",
   data () {
     return {
+      colourRules: [],
       alertState: false,
       successState: false,
       alertMessage: "",
-      notificationOccurance: "",
+      notificationOccurance: "Every",
       notificationDay: "",
+      notificationDate: "",
       notificationTime: "",
-      occurance: "",
+      date: "",
+      occurance: "Every",
       day: "",
       time: "",
+      teams: [],
       occurances: [
         "Every",
         "On"
@@ -191,10 +243,23 @@ export default {
         "Sunday"
       ],
       max: "",
-      location: ""
+      location: "",
+      colours: [
+        "Red",
+        "Blue",
+        "Black",
+        "White",
+        "Green",
+        "Yellow",
+        "Orange"
+      ]
     }
   },
   methods: {
+    maxLength: function () {
+      console.log("esgf")
+      return "Error"
+    },
     submitForm: function () {
       var self = this
       this.alertState = false
@@ -219,6 +284,7 @@ export default {
     })
     .catch(function (error) {
       console.log(error)
+      self.$router.push("Teams")
       self.alertState = true
       self.alertMessage = "Your game settings could not be updated, please try again."
     })
