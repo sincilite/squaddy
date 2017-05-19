@@ -21,7 +21,7 @@
             <v-card class="mt-2">
               <v-card-row class="blue darken-1">
                 <v-card-title>
-                  <span class="white--text">New players</span>
+                  <span class="white--text">New player</span>
                 </v-card-title>
               </v-card-row>
               <v-card-text>
@@ -49,7 +49,7 @@
               </v-card-text>
               <v-card-row actions>
                  <v-btn light flat @click.native="cancel()">Cancel</v-btn>
-                 <v-btn class="blue--text darken-1" light flat @click.native="addPlayer()">Add + </v-btn>
+                 <v-btn class="blue--text darken-1" light flat @click.native="addPlayer()">Add</v-btn>
               </v-card-row>
             </v-card>
           </v-col>
