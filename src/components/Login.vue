@@ -33,7 +33,12 @@
                       </v-layout>
                     </v-card-text>
                     <v-card-row actions>
-                     <v-btn type="submit" primary class="white--text">Login</v-btn>
+                     <v-btn type="submit"
+                     primary
+                     :loading="loading3"
+                     @click.native="loader = 'loading3'"
+                     :disabled="loading3"
+                     class="white--text">Login</v-btn>
                   </v-card-row>
                 </v-card>
              </v-flex>
@@ -46,7 +51,18 @@
 export default {
   name: "login",
   data () {
-    return {}
+    return {
+      loader: null,
+      loading3: false
+    }
+  },
+  watch: {
+    loader () {
+      const l = this.loader
+      this[l] = !this[l]
+      setTimeout(() => (this[l] = false), 3000)
+      this.loader = null
+    }
   }
 }
 </script>
