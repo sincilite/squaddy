@@ -32,7 +32,7 @@
             </v-list-item>
           </v-list>
         </v-navigation-drawer>
-        <v-toolbar class="indigo">
+        <v-toolbar>
           <v-toolbar-side-icon light @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
           <v-toolbar-title>Toolbar</v-toolbar-title>
           <v-spacer></v-spacer>
@@ -45,7 +45,7 @@
             <router-view></router-view>
           </v-container>
         </main>
-      <v-footer class="blue darken-1">Footer</v-footer>
+      <v-footer class="darken-1">Footer</v-footer>
     </v-app>
   </div>
 </template>
