@@ -24,3 +24,7 @@
 }
 
 .no-h-padding { padding-left: 8px; padding-right: 8px; }
+
+.centre-align {
+    margin: 0 auto;
+}

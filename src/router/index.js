@@ -4,6 +4,7 @@ import Confirm from "@/components/Confirm"
 import Games from "@/components/Games"
 import Manage from "@/components/Manage"
 import Players from "@/components/Players"
+import Login from "@/components/Login"
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: "/games",
       name: "Games",
       component: Games
+    },
+    {
+      path: "/login",
+      name: "Login",
+      component: Login
     }
   ]
 })
