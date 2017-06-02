@@ -3,8 +3,10 @@
     <div class="login">
 
         <v-layout row class="mb-2 ml-2 mr-2">
-
            <v-flex xs12 sm8 md3 class="centre-align">
+              <v-alert error v-model="alertState">
+                {{ alertMessage }}
+              </v-alert>
               <v-card>
                   <v-card-row class="primary darken-1">
                     <v-card-title>
@@ -36,36 +38,85 @@
                   <v-card-row actions>
                    <v-btn type="submit"
                    primary
-                   :loading="loading3"
+                   :loading="loading"
                    @click.native="submitForm"
-                   :disabled="loading3"
+                   :disabled="loading"
                    class="white--text">Login</v-btn>
                 </v-card-row>
               </v-card>
            </v-flex>
-
-
         </v-layout>
-
     </div>
 
 </template>
 <script>
+import axios from "axios"
+
 export default {
   name: "login",
   data () {
     return {
       loader: null,
-      loading3: false
+      loading: false,
+      alertState: false
     }
   },
   watch: {
     loader () {
       const l = this.loader
       this[l] = !this[l]
-      setTimeout(() => (this[l] = false), 3000)
-      this.loader = null
     }
   },
+  methods: {
+    startLoader () {
+      this.loader = "loading"
+    },
+    stopLoader () {
+      this.loader = null
+      this.loading = false
+    },
+    logError (error) {
+      console.log("LOGGIN ERROR")
+      console.log(error)
+    },
+    submitForm () {
+      var self = this
+      self.startLoader()
+      var api = process.env.API_HOST
+
+      this.alertState = false
+      axios.post(api + "/login.php", {
+        notifications: {
+          occurance: this.notificationOccurance,
+          day: this.notificationDay,
+          time: this.notificationTime
+        },
+        game: {
+          occurance: this.occurance,
+          day: this.day,
+          time: this.time,
+          location: this.location,
+          max: this.max
+        }
+      })
+      .then(function (response) {
+        self.stopLoader()
+        console.log(response.data)
+        if (response.data.result === true) {
+          self.successState = true
+          self.$router.push("Games")
+        } else {
+          self.alertState = true
+          self.alertMessage = "The login details you provided could not be found, please try again"
+        }
+      })
+      .catch(function (error) {
+        self.stopLoader()
+        self.alertState = true
+        self.alertMessage = "Your game settings could not be updated, please try again."
+        self.logError(error)
+      })
+    }
+  }
 }
 </script>
