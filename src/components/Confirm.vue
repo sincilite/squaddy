@@ -4,20 +4,18 @@
       <v-row class="mb-4 ml-4 mr-4">
         <v-col xs12>
           <v-col xs12>
-              <v-card>
+              <v-card v-for="item in items" class="mb-4">
                 <v-card-row height="200px" class="primary mb-2 blue darken-4 white--text">
                     <v-card-title style="text-align: left;">
-                    Monday 15th May 2017 <br>
-                    Rossett Sport Center<br>
-                    6pm
+                    {{ item.day }} {{ item.date }} <br>
+                    {{ item.location }}<br>
+                    {{ item.time }}
                     </v-card-title>
                   </v-card-row>
                   <v-card-row action>
-                  <v-btn flat class="no-h-padding">Currently {{ remaining }} places of {{ total }} available</v-btn>
+                  <span class="no-h-padding">Currently {{ item.remaining }} places of {{ item.total }} available</span>
                   <v-spacer></v-spacer>
-                    <v-btn v-bind:class="classObject" v-on:click.native="confirmGame">{{ buttonLabel }}
-                      <v-icon class="icon--right">check_circle</v-icon>
-                    </v-btn>
+                    <attending-button :item="item" v-on:attendanceChange="item.remaining = $event"></attending-button>
                   </v-card-row>
               </v-card>
           </v-col>
@@ -27,6 +25,10 @@
   </div>
 </template>
 <script>
+
+import axios from "axios"
+import AttendingButton from "./actions/Attending.vue"
+
 export default {
   name: "index",
   data () {
@@ -34,32 +36,30 @@ export default {
       remaining: 10,
       total: 18,
       isPlaying: false,
-      buttonLabel: "I'm in!"
+      buttonLabel: "I'm in!",
+      items: this.getGames()
     }
   },
-  computed: {
-    classObject: function () {
-      if (this.isPlaying === false) {
-        return "primary white--text"
-      } else {
-        return "default"
-      }
-    }
+  components: {
+    "attending-button": AttendingButton
   },
   methods: {
-    confirmGame: function (event) {
-      if (this.isPlaying === false && this.checkPlaces()) {
-        this.remaining = this.remaining - 1
-        this.isPlaying = true
-        this.buttonLabel = "Drop out"
-      } else {
-        this.dropOut()
-      }
+    checkTotals () {
+
     },
-    dropOut: function () {
-      this.isPlaying = false
-      this.remaining = this.remaining + 1
-      this.buttonLabel = "I'm in!"
+    getGames () {
+      var api = process.env.API_HOST
+      var self = this
+      axios.get(api + "/games.php")
+      .then(function (response) {
+        self.items = response.data.data
+      })
+      .catch(function (error) {
+        self.logError(error)
+      })
+    },
+    logError (error) {
+      console.log(error)
     },
     checkPlaces: function () {
       if (this.remaining > 0) {
