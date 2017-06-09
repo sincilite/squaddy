@@ -18,9 +18,11 @@
         hide-actions
       >
       <template slot="items" scope="props">
-        <td class="text-xs-right">{{ props.item.location }}</td>
-        <td class="text-xs-right">{{ props.item.date }}</td>
-        <td class="text-xs-right">{{ props.item.time }}</td>
+        <td class="text-xs-left">{{ props.item.location }}</td>
+        <td class="text-xs-left">{{ props.item.date }}</td>
+        <td class="text-xs-left">{{ props.item.time }}</td>
+        <td class="text-xs-left">
+          <attending-button :item="props.item"></attending-button></td>
       </template>
     </v-data-table>
   </v-card>
@@ -28,6 +30,7 @@
 
 <script>
 import axios from "axios"
+import AttendingButton from "./actions/Attending.vue"
 
 export default {
   data () {
@@ -41,11 +44,22 @@ export default {
           sortable: false,
           value: "location"
         },
-        { text: "When", value: "date" },
-        { text: "Time", value: "time" }
+        {
+          text: "When",
+          value: "date",
+          left: true
+        },
+        {
+          text: "Time",
+          value: "time",
+          left: true
+        }
       ],
       items: this.getGames()
     }
+  },
+  components: {
+    "attending-button": AttendingButton
   },
   methods: {
     getGames () {
